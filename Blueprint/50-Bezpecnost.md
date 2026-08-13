@@ -4,6 +4,21 @@
 
 Bezpečnost je součástí architektury ConfiRay od začátku.
 
+Tato kapitola popisuje především produkční požadavky. Současné technologické demo není produkčně zabezpečený Customer Portal.
+
+---
+
+## Současný stav dema
+
+**Částečně implementováno:**
+
+- webový klient nevolá Creo přímo, ale používá backend a FIFO requesty;
+- Creo Worker kontroluje aktivní model a `A_CONFIGURATOR=CONVEYOR`;
+- backend omezuje formát request ID, vazbu requestu na PVZ, cesty metadata/help assets a cleanup pouze na dočasné soubory odpovídající povolenému názvu;
+- veřejné spojení k demu zajišťuje HTTPS přes Cloudflare Tunnel.
+
+**Dosud neimplementováno:** aplikační přihlášení, autorizace endpointů, tenant isolation, vlastnictví requestů, chráněné stahování výstupů, audit uživatelů, rate limiting a správa tajemství pro produkční provoz.
+
 ---
 
 ## Uživatelské účty
@@ -45,6 +60,8 @@ Administrativní funkce jsou dostupné pouze oprávněným uživatelům.
 Worker nesmí být přímo ovládán veřejným uživatelem.
 
 Veškeré požadavky musí procházet Backendem.
+
+Toto oddělení je v současném demu implementované, ale backend endpointy ještě vyžadují produkční autentizaci a autorizaci.
 
 ---
 

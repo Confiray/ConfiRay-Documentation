@@ -14,11 +14,13 @@ Požadavky jsou ukládány do fronty.
 
 Například:
 
-JOB 001 → QUEUED
-JOB 002 → QUEUED
-JOB 003 → QUEUED
+Request 000001 → `queued`
+Request 000002 → `queued`
+Request 000003 → `queued`
 
 Worker postupně zpracovává jednotlivé Jobs.
+
+**Implementováno a ověřeno:** requesty jsou persistované lokálně, dostávají vzestupné šestimístné ID a worker atomicky přebírá nejnižší queued ID. Tím vzniká FIFO pořadí.
 
 ---
 
@@ -29,6 +31,8 @@ Více uživatelů může požádat o generování současně.
 Každý požadavek dostane vlastní Job ID.
 
 Pořadí zpracování je řízeno Queue.
+
+WebCon zobrazuje vlastní `queuePosition`, aniž by klientovi zpřístupňoval obsah ostatních requestů.
 
 ---
 
@@ -54,6 +58,8 @@ Například:
 
 Konkrétní možnosti závisí na licencování a technickém prostředí.
 
+Současné demo používá jeden Creo Worker a serializované zpracování. Distribuce práce mezi více workerů zatím není implementovaná.
+
 ---
 
 ## Monitoring
@@ -65,6 +71,8 @@ Systém sleduje:
 - dobu zpracování,
 - počet chyb,
 - stav Workerů.
+
+Tento seznam je cílový monitoring. Současný základ ukládá stav a základní časové údaje requestu, ale nemá plnou telemetrii, dashboard, heartbeat, SLA ani automatický retry.
 
 ---
 

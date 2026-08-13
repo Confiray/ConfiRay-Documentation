@@ -2,41 +2,52 @@
 
 ## Účel
 
-Lokální instalace umožňuje provozovat ConfiRay přímo v prostředí zákazníka.
+Lokální instalace umožňuje provozovat ConfiRay přímo ve vývojovém prostředí nebo v infrastruktuře zákazníka.
 
 ---
 
-## Vývojová fáze
+## Současná demo instalace
 
-První verze ConfiRay Backend může být provozována na vývojovém notebooku.
+**Implementováno a ověřeno:** první ConfiRay Server běží na vývojovém počítači.
 
-Notebook v této fázi představuje první ConfiRay Server.
+```text
+Veřejný uživatel
+└── https://demo.confiray.cz
+    └── Cloudflare Tunnel
+        └── lokální Web3D backend (127.0.0.1:8001)
+            ├── WebCon a ThingView
+            ├── sdílená Conveyor metadata a help assets
+            ├── cache aktuální Creo konfigurace
+            ├── FIFO request JSON
+            └── dočasné PVZ a exportní logy
 
-Součástí prostředí může být:
+Lokální Creo relace
+└── ConfiRay Creo Worker
+    ├── guard A_CONFIGURATOR=CONVEYOR
+    ├── čtení a zápis parametrů
+    ├── regenerace modelu
+    └── ProductView export PVZ
+```
 
-- Web,
-- Backend,
-- Job Queue,
-- Creo,
-- Creo Worker,
-- Publisher,
-- 3D Viewer.
+Po úspěšném načtení PVZ ve WebConu backend naplánuje jeho cleanup. Demo nepoužívá produkční databázi ani trvalé úložiště artefaktů.
 
 ---
 
 ## Produkční lokální instalace
 
-Produkční instalace může mít vlastní server.
-
-Například:
+Produkční instalace může oddělit aplikační server a Creo Worker:
 
 ```text
 ConfiRay Server
-│
-├── Backend
+├── Web / API
 ├── Database
 ├── Job Queue
-└── Storage
+├── Identity and access control
+├── Monitoring
+└── Artifact Storage
 
 Creo Worker
-└── Creo + Configurator + Publisher
+└── Creo + ConfiRay Configurator + Publisher
+```
+
+Produkční zabezpečení, recovery, zálohování, deployment balíčky, více workerů a PDM/PLM konektory jsou plánované.

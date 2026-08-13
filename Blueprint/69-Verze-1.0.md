@@ -2,79 +2,54 @@
 
 ## Cíl
 
-První verze ConfiRay ověřuje základní princip automatizovaného generování konfigurace prostřednictvím webového rozhraní.
+Verze 1.0 ověřuje základní princip automatizovaného generování platné konfigurace prostřednictvím webového rozhraní a odděluje tento technologický milník od plné produkční platformy.
+
+Referenčním produktem je Conveyor.
 
 ---
 
-## Referenční produkt
+## Implementováno a ověřeno
 
-Prvním demonstračním produktem je konfigurátor dopravníku.
+Současný technologický/demo základ umožňuje:
 
----
+1. načíst WebCon z `demo.confiray.cz` přes Cloudflare Tunnel;
+2. vytvořit formulář ze sdílených `PARAMETERS`, `RULES` a `HELP`;
+3. načíst konfiguraci aktivního Conveyor modelu z Creo;
+4. upravit a validovat parametry;
+5. odeslat při Publish neměnný request snapshot;
+6. zařadit request do persistentní FIFO fronty a zobrazit `queuePosition`;
+7. převzít request jedním Creo Workerem;
+8. ověřit správný aktivní konfigurátor;
+9. nastavit parametry a automaticky regenerovat Creo model;
+10. exportovat request-bound barevný PVZ;
+11. zobrazit stavy `queued`, `processing`, klientský `rendering`, `ready` nebo chybu;
+12. načíst PVZ v ThingView;
+13. ovládat standardní pohledy, ConfiRay izometrii, Fit, Zoom a relativní Orbit;
+14. po zobrazení naplánovat cleanup dočasného PVZ a logů.
 
-## Minimální funkční celek
-
-Verze 1.0 musí umožnit:
-
-1. uživatel otevře web,
-2. přihlásí se,
-3. zobrazí konfigurátor,
-4. změní parametry,
-5. stiskne Generate,
-6. Backend vytvoří Job,
-7. Job je zařazen do Queue,
-8. Creo Worker Job převezme,
-9. Creo provede konfiguraci,
-10. Publisher vytvoří výstup,
-11. výstup je uložen,
-12. Web zobrazí nový 3D model.
+PVZ nahradil původně uvažovaný STL technologický test, protože zachovává vzhled a je přímo použitelný v současném ThingView workflow.
 
 ---
 
-## První výstup
+## Částečně implementováno
 
-První výstupní formát je STL.
-
-STL je pouze technologický test.
-
-Cílový 3D formát bude řešen následně s ohledem na:
-
-- barvy,
-- vzhled,
-- velikost souboru,
-- výkon webového Vieweru,
-- možnost zobrazovat technické informace.
+- Customer Portal dnes existuje jako veřejný WebCon demo vstup, nikoli jako plný portál s účty a historií.
+- Backend, API a fronta jsou funkční lokální základ nad JSON soubory, nikoli produkční distribuovaná služba.
+- Publish vytváří dočasný webový PVZ, nikoli úplný balík nabídkové a výrobní dokumentace.
+- Jeden Creo Worker zpracovává requesty sériově; více workerů a recovery nejsou hotové.
 
 ---
 
-## Současní uživatelé
+## Plánováno pro produkční 1.0 a navazující fáze
 
-Verze 1.0 musí být navržena s Job Queue.
+- autentizace, autorizace a oddělení zákazníků,
+- trvalé konfigurace, historie a artefakty,
+- produkční monitoring, heartbeat, retry a obnova po výpadku,
+- další produktové konfigurátory,
+- automatické end-to-end testy a deployment packaging,
+- plný Publisher pro nabídky, výkresy, PDF, STEP, DXF a výrobní data,
+- Price/CPQ,
+- Deliver a integrace ERP, CRM a PDM/PLM,
+- více Creo Workerů podle licencování a zatížení.
 
-To umožní současné požadavky více uživatelů.
-
-První testovací prostředí může používat pouze jeden Creo Worker.
-
----
-
-## Vývojové prostředí
-
-První verze může běžet na vývojovém notebooku.
-
-Notebook slouží jako první ConfiRay Server.
-
----
-
-## Další fáze
-
-Po ověření základního řetězce budou následovat:
-
-- registrace,
-- administrace,
-- Analytics,
-- historie,
-- barevný 3D formát,
-- další produkty,
-- ERP,
-- nabídky,
-- více Workerů.
+Funkční WebCon + Creo + PVZ + ThingView workflow je základ cílové architektury, nikoli důkaz dokončení celé ConfiRay Automation platformy.

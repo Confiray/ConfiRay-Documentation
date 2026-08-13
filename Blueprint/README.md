@@ -10,6 +10,21 @@ Je to dokument, který popisuje proč ConfiRay vzniká, jakou má vizi, jaké pr
 
 Blueprint slouží jako společný referenční bod pro zakladatele, vývojáře, obchodníky, implementační konzultanty i budoucí zaměstnance.
 
+Blueprint rozlišuje tři úrovně zralosti:
+
+- **Implementováno a ověřeno** – funkce existuje v současném technologickém základu a byla ověřena v demonstračním workflow.
+- **Částečně implementováno** – existuje funkční základ, ale chybí produkční zabezpečení, odolnost, obecnost nebo navazující procesy.
+- **Plánováno / cílová architektura** – dlouhodobá specifikace platformy, nikoli tvrzení o současné implementaci.
+
+Produktové členění ConfiRay Automation:
+
+**Capture → Configure → Price → Publish → Deliver**
+
+- **ConfiRay Sales** využívá především Capture, Configure, Price a obchodní část Publish/Deliver.
+- **ConfiRay Engineering** rozšiřuje Configure, Publish a Deliver o CAD automatizaci, konstrukční výstupy a budoucí PDM/PLM workflow.
+
+Jde o dvě edice jedné platformy nad společnými daty a pravidly, ne o dva oddělené produkty.
+
 ---
 
 # Obsah

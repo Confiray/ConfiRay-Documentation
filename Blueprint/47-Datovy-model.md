@@ -4,6 +4,20 @@
 
 Datový model definuje základní objekty platformy ConfiRay.
 
+Objekty níže představují cílový doménový model. Současné technologické demo zatím nepoužívá plnou databázovou implementaci User, Session, Product, Configuration, Worker a Audit Event.
+
+---
+
+## Současný persistovaný model dema
+
+**Implementováno a ověřeno:**
+
+- `CurrentConfiguration` – lokální cache úplné konfigurace aktivního Creo modelu a čas synchronizace;
+- `Request` – šestimístné ID, snapshot parametrů, stav, request-bound PVZ, časy vytvoření/aktualizace a případně zobrazení/cleanup;
+- dočasný `Artifact` – `confiray_<requestId>.pvz` a nativní exportní log.
+
+Request snapshot se po zařazení do fronty nemění. Data jsou dnes ukládána atomicky do JSON souborů; nejde ještě o produkční databázový ani víceuživatelský model.
+
 ---
 
 ## User
@@ -72,6 +86,8 @@ Obsahuje:
 
 Požadavek na zpracování.
 
+V současné implementaci odpovídá tomuto objektu `Request`.
+
 Obsahuje:
 
 - ID,
@@ -109,12 +125,14 @@ Výstup vytvořený Jobem.
 
 Například:
 
-- STL,
+- STL (plánovaný exportní formát),
 - 3D model,
 - PDF,
 - DXF,
 - STEP,
 - obrázek.
+
+Současný ověřený Artifact je dočasný barevný PVZ pro ThingView. Trvalé artefakty, vlastnictví, oprávnění, revize a vazby na PDM/PLM jsou plánované.
 
 ---
 

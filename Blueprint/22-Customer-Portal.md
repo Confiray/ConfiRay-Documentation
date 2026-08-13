@@ -71,6 +71,12 @@ Musí však používat stejný datový a pravidlový základ.
 
 Změna parametrů na webu vytvoří požadavek na zpracování.
 
+### Současný stav
+
+**Implementováno a ověřeno v technologickém demu:** WebCon generuje pole ze stejných `PARAMETERS`, `RULES` a `HELP` jako Creo Configurator, načte aktuální konfiguraci aktivního Conveyor modelu, validuje změny a po Publish odešle neměnný snapshot viditelných parametrů.
+
+**Plánováno pro Customer Portal:** produktový katalog, uživatelské účty, oprávnění, trvalé ukládání konfigurací a zákaznická historie.
+
 ---
 
 ## Generování
@@ -87,6 +93,8 @@ Po stisknutí tlačítka Generate:
 8. web obdrží informaci o dokončení,
 9. 3D výsledek se zobrazí zákazníkovi.
 
+V současném demu tuto roli plní tlačítko **Publish**: backend vytvoří request, FIFO fronta jej předá Creo Workeru, Creo model automaticky regeneruje, vznikne dočasný PVZ a WebCon jej zobrazí v ThingView. Web ukazuje čekání ve frontě včetně `queuePosition`, zpracování, vykreslování a chybu.
+
 ---
 
 ## Současní uživatelé
@@ -100,6 +108,8 @@ Požadavky jsou předávány do Job Queue.
 Jednotlivý Creo Worker zpracovává jednu úlohu v daném okamžiku.
 
 Více workerů může být přidáno později.
+
+**Současný stav:** persistentní lokální FIFO fronta a serializované zpracování jedním Creo Workerem jsou implementované. Produkční víceuživatelské oddělení, retry, distribuce na více workerů a obnova po výpadku jsou plánované.
 
 ---
 

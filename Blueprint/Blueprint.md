@@ -227,6 +227,21 @@ Je to platforma, která propojuje všechny důležité části obchodního a kon
 
 Platforma bude postupně rozšiřována o další moduly.
 
+ConfiRay Automation organizuje cestu od požadavku k výsledku do pěti navazujících oblastí:
+
+- **Capture** – zachycení požadavku zákazníka, obchodníka nebo konstruktéra.
+- **Configure** – metadata, parametry, pravidla, validace a vytvoření platné konfigurace.
+- **Price** – kalkulace a obchodní ocenění konfigurace.
+- **Publish** – vytvoření 3D náhledu, nabídky, výkresů a dalších dokumentů či výrobních výstupů.
+- **Deliver** – řízené předání výsledků zákazníkovi, ERP, výrobě, PDM/PLM a dalším systémům.
+
+Platforma je nabízena ve dvou navazujících edicích:
+
+- **ConfiRay Sales** pro zachycení požadavku, konfiguraci, cenu, nabídku a zákaznické workflow.
+- **ConfiRay Engineering** pro CAD automatizaci, regeneraci, konstrukční Publish a budoucí předání do výroby a PDM/PLM.
+
+Edice sdílejí produktová metadata, pravidla a konfiguraci. Engineering navazuje na obchodní konfiguraci místo jejího ručního přepisování.
+
 - Configurator
 - AI Assistant
 - Pricing
@@ -234,6 +249,21 @@ Platforma bude postupně rozšiřována o další moduly.
 - Customer Portal
 - Integration Hub
 - Analytics
+
+## 7.1 Současný ověřený technologický základ
+
+Pro referenční produkt Conveyor dnes existuje funkční demo části **Configure** a technologického základu **Publish**:
+
+- sdílená metadata `PARAMETERS`, `RULES` a `HELP` pro Creo Configurator i WebCon,
+- načtení konfigurace aktivního Creo modelu do WebConu,
+- validační pravidla a request snapshot,
+- serverová FIFO fronta a jeden Creo Worker,
+- automatické nastavení parametrů, regenerace a export PVZ,
+- webové načtení PVZ v ThingView včetně standardních pohledů, izometrie, Fit, Zoom a relativního Orbit,
+- dočasný cleanup výstupů,
+- veřejné demo přes `demo.confiray.cz`.
+
+Tento řetězec je implementovaný a ověřený jako technologický/demo základ. Neznamená dokončení Price, plného Publisheru, Deliver, zákaznických účtů, historie, produkční bezpečnosti ani PDM/PLM integrace.
 
 ---
 

@@ -14,6 +14,8 @@ Creo je hlavním CAD výpočetním prostředím pro automatizované generování
 
 Komunikace probíhá prostřednictvím Creo Workeru.
 
+**Implementováno a ověřeno:** Worker běží v Creo relaci, ověřuje správný Conveyor konfigurátor, čte a zapisuje parametry podle sdílených metadat, automaticky regeneruje aktivní model a publikuje request-bound PVZ. Aktuální konfiguraci synchronizuje do lokálního backendu; WebCon Creo přímo neovládá.
+
 ---
 
 ## ERP
@@ -29,6 +31,8 @@ ERP poskytuje zejména:
 
 Konkrétní rozsah závisí na implementaci.
 
+ERP integrace zatím není součástí funkčního dema.
+
 ---
 
 ## CRM
@@ -41,6 +45,8 @@ CRM může poskytovat:
 - nabídky,
 - historii komunikace.
 
+CRM integrace je plánovaná.
+
 ---
 
 ## PDM / PLM
@@ -51,6 +57,8 @@ PDM/PLM může sloužit jako úložiště:
 - dokumentace,
 - revizí,
 - výrobních dat.
+
+Plný Publisher a PDM/PLM workflow zatím nejsou implementované. Současný PVZ je dočasný webový výstup, nikoli řízený PDM artefakt.
 
 ---
 

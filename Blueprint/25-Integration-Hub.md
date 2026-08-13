@@ -41,6 +41,12 @@ Worker provede:
 - Publish,
 - vytvoření výstupu.
 
+### Současný stav integrace Creo
+
+**Implementováno a ověřeno:** WebCon komunikuje s lokálním backendem, backend ukládá request snapshot do FIFO fronty a Creo Worker si nejstarší požadavek atomicky převezme. Worker ověří aktivní model a `A_CONFIGURATOR=CONVEYOR`, mapuje metadata na Creo parametry, model regeneruje a publikuje request-bound PVZ.
+
+Worker zároveň synchronizuje kompletní aktuální konfiguraci aktivního Creo modelu do backendu. Webový klient Creo přímo neovládá.
+
 ---
 
 ## Asynchronní komunikace
@@ -53,11 +59,14 @@ Web sleduje jeho stav.
 
 Možné stavy:
 
-- QUEUED
-- RUNNING
-- COMPLETED
-- FAILED
-- CANCELLED
+- `queued`
+- `processing`
+- `ready`
+- `failed`
+
+`rendering` je navazující klientský stav WebConu při načítání hotového PVZ do ThingView. `viewed` a `cleaned` jsou interní stavy životního cyklu dočasného výstupu.
+
+Cancellation, retry, heartbeat a obecné orchestrace více typů workerů jsou cílová architektura, nikoli současná implementace.
 
 ---
 

@@ -44,3 +44,11 @@ Konkrétní umístění dat závisí na typu instalace a požadavcích zákazní
 Cloud není podmínkou první verze.
 
 První vývojová verze může běžet lokálně.
+
+---
+
+## Současný veřejný demo provoz
+
+**Implementováno a ověřeno:** `demo.confiray.cz` je veřejný vstup do WebConu přes Cloudflare Tunnel. Tunnel směruje provoz na lokální ConfiRay backend; Creo Worker, FIFO requesty, PVZ soubory a ThingView assets zůstávají v lokálním prostředí.
+
+To není plná cloudová instalace. Cloudová databáze, objektové úložiště, horizontální škálování, produkční identity, monitoring, vysoká dostupnost a oddělení tenantů jsou plánované.

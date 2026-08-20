@@ -36,13 +36,19 @@ Základní operace:
 
 **Implementováno a ověřeno:**
 
+- session login/logout a načtení přihlášené identity;
+- `GET /api/runtime-status` – necitlivá readiness backendu, worker heartbeat a dostupnost HeliosConnectoru;
+- `GET /api/customers?q=...`, `GET /api/customers/{id}` a kontakty firmy – session-bound Customer API přes serverově zvolený Connector;
 - `GET /api/configuration/current` – aktuální konfigurace synchronizovaná z Creo;
 - `PUT /api/configuration/current` – úplná synchronizace z workeru;
 - `POST /api/requests` – vytvoření request snapshotu ve stavu `queued`;
 - `GET /api/requests/{requestId}` – stav, `queuePosition` a po `ready` název PVZ;
 - `POST /api/worker/claim` – atomické FIFO převzetí nejstaršího requestu a změna na `processing`;
+- `POST /api/worker/heartbeat` – lease a recovery workeru;
 - `POST /api/requests/{requestId}/status` – worker oznámí `ready` nebo `failed`;
-- `POST /api/cleanup` – po zobrazení naplánuje cleanup dočasného výstupu.
+- `POST /api/cleanup` – po zobrazení naplánuje cleanup dočasného výstupu;
+- `POST /api/offers` – serverově ověřený customer/contact/configuration/model/render → DOCX/PDF;
+- `GET /api/offers/{offerId}/pdf|docx` – bezpečné stažení pouze povoleného offer artefaktu.
 
 Metadata a help assets jsou backendem poskytovány z autoritativní Conveyor definice.
 
@@ -76,7 +82,7 @@ Backend tak může rozlišit:
 - ERROR,
 - OFFLINE.
 
-Heartbeat a centrální evidence workerů zatím nejsou implementované.
+**DONE / FUNKČNÍ:** Creo Worker posílá heartbeat každých 5 sekund. Backend udržuje 90sekundový lease, kontroluje ownership requestu a zotavuje orphaned `processing` requesty do `failed`. Produkční persistentní registr workerů, telemetrie a multi-worker scheduler jsou **PLANNED / PLÁNOVÁNO**.
 
 ---
 
@@ -96,4 +102,4 @@ API nesmí být veřejně dostupné bez autentizace a autorizace.
 
 Citlivé operace musí být chráněny.
 
-To je produkční požadavek. Současné veřejné demo přes Cloudflare Tunnel nemá plnou aplikační autentizaci a autorizaci a nesmí být považováno za produkční API.
+**DONE / FUNKČNÍ v současném rozsahu:** browser API vyžaduje serverovou session, změnové operace CSRF a request/offer/PVZ endpointy kontrolují vlastníka a organizaci. Worker API přijímá pouze lokální worker provoz a používá heartbeat/ownership. Produkční federovaná identity, role, tenant isolation, audit a secret manager zůstávají **PLANNED / PLÁNOVÁNO**.

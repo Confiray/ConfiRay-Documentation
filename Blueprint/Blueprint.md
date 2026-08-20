@@ -250,20 +250,97 @@ Edice sdílejí produktová metadata, pravidla a konfiguraci. Engineering navazu
 - Integration Hub
 - Analytics
 
-## 7.1 Současný ověřený technologický základ
+## 7.1 Technická osa platformy
 
-Pro referenční produkt Conveyor dnes existuje funkční demo části **Configure** a technologického základu **Publish**:
+**IDENTITY → CUSTOMER → PRODUCT → CONFIGURE → VALIDATE → CAD → BOM → PRICE → OFFER → ORDER → PROJECT**
 
-- sdílená metadata `PARAMETERS`, `RULES` a `HELP` pro Creo Configurator i WebCon,
-- načtení konfigurace aktivního Creo modelu do WebConu,
-- validační pravidla a request snapshot,
-- serverová FIFO fronta a jeden Creo Worker,
-- automatické nastavení parametrů, regenerace a export PVZ,
-- webové načtení PVZ v ThingView včetně standardních pohledů, izometrie, Fit, Zoom a relativního Orbit,
-- dočasný cleanup výstupů,
-- veřejné demo přes `demo.confiray.cz`.
+Tato osa zpřesňuje produktové členění Capture → Configure → Price → Publish → Deliver. Jednotlivé kroky sdílejí identitu, organizaci, zákazníka, produkt, neměnný konfigurační snapshot a jeho revizi; nemají si předávat neřízené kopie dat.
 
-Tento řetězec je implementovaný a ověřený jako technologický/demo základ. Neznamená dokončení Price, plného Publisheru, Deliver, zákaznických účtů, historie, produkční bezpečnosti ani PDM/PLM integrace.
+| Krok | Stav | Současný rozsah |
+|---|---|---|
+| IDENTITY | **DONE / FUNKČNÍ** | Přihlášení konkrétním e-mailem, serverová session, CSRF, oddělení identity od organizace. |
+| CUSTOMER | **DONE / FUNKČNÍ** | Serverově volený Connector; ALVARIS → read-only HeliosConnector, DEMO → JSON/Virtual ERP; firma a kontaktní osoba. |
+| PRODUCT | **IN DEVELOPMENT / ROZPRACOVÁNO** | Conveyor je první metadata-driven produkt; obecný katalog a Product Package zatím nejsou dokončené. |
+| CONFIGURE | **DONE / FUNKČNÍ** | Responsive WebCon, `PARAMETERS`, `visibleIf`, kontextová `HELP`, konfigurace I/L/Z. |
+| VALIDATE | **DONE / FUNKČNÍ** | RULES a vrstvená kontrola WebCon → server → worker → Publisher, včetně `CM_INCOMPATIBLE_WITH_BELT_ACCESSORIES`. |
+| CAD | **DONE / FUNKČNÍ** | FIFO request, Creo Worker, heartbeat/lease, regenerace, request-bound PVZ a ThingView. |
+| BOM | **PLANNED / PLÁNOVÁNO** | Odvození skutečné struktury nakonfigurovaného výrobku. |
+| PRICE | **PLANNED / PLÁNOVÁNO** | ERP ceny, BOM, zákaznické podmínky a obchodní pravidla. |
+| OFFER | **IN DEVELOPMENT / ROZPRACOVÁNO** | Funkční serverově generovaný DOCX/PDF prototyp s dynamickým renderem, zákazníkem a supplier contactem; bez skutečné ceny a trvalého offer modelu. |
+| ORDER | **PLANNED / PLÁNOVÁNO** | Schválení nabídky a bezpečný zápis do ERP. |
+| PROJECT | **PLANNED / PLÁNOVÁNO** | Realizace, výrobky, dokumentace, servis a historie projektu. |
+
+## 7.2 Současný ověřený technologický základ
+
+Pro referenční produkt Conveyor dnes funguje:
+
+- konkrétní e-mailová identita → organization → serverově vybraný Connector;
+- ALVARIS → read-only Helios002 a DEMO → JSON/Virtual ERP;
+- vyhledání firmy a jejích kontaktních osob a supplier contact přihlášeného zaměstnance;
+- sdílená metadata `PARAMETERS`, `RULES` a `HELP`, responsive WebCon a kontextová nápověda;
+- vícevrstvá validace, neměnný request snapshot, persistentní FIFO queue a `queuePosition`;
+- Creo Worker s ownership, 5s heartbeat, 90s lease a orphan recovery;
+- automatická regenerace, request-bound PVZ, ThingView a dynamický render;
+- pětistránková DOCX/PDF nabídka otevřená bezpečným endpointem;
+- jednotný Windows START/RESTART, runtime readiness a veřejné demo přes `demo.confiray.cz`.
+
+Jde o funkční technologický a obchodní vertikální řez. Neznamená dokončení produkční identity, persistentních draft offers, BOM/Price, Order/Project, plného Publisher/PDM/PLM workflow ani multi-product nabídky.
+
+## 7.3 Product Package a produktový katalog
+
+**PLANNED / PLÁNOVÁNO:** Každý podporovaný produkt bude dodán jako verzovaný Product Package obsahující:
+
+- Master CAD model;
+- Product Default / startovní parametry;
+- configuration schema;
+- rules;
+- UI definition;
+- help;
+- BOM mapping;
+- Price mapping;
+- Publisher mapping.
+
+Nová konfigurace musí vždy vzniknout z explicitního Product Default/Masteru dané revize. Poslední stav aktivního Creo workeru je pouze execution state a nikdy nesmí být autoritativním začátkem nové uživatelské konfigurace.
+
+Plánovaný katalog zahrnuje Dopravník, pracovní stůl, rám, oplocení a další Product Packages. Conveyor je první funkční vertikála, nikoli hardcoded hranice platformy.
+
+## 7.4 Persistence, draft offers a multi-product nabídka
+
+**PLANNED / PLÁNOVÁNO:**
+
+`Customer → Draft Offers → Offer Items → Configuration Snapshots`
+
+Každá položka nabídky musí persistovat minimálně product ID, configuration ID, revision, úplný configuration snapshot, validation state, vytvořený model, PVZ reference a render; později také BOM a price. Rozpracovanou nabídku lze kdykoliv znovu otevřít. Existující validní PVZ se při pouhém otevření znovu negeneruje.
+
+WebCon reload obnoví poslední relevantní persistentní konfiguraci přihlášeného uživatele a zákazníka, nikoli poslední konfiguraci workeru. Current Creo configuration je dnes pouze synchronizační cache technologického dema.
+
+Aktuální nabídka bude podporovat **Přidat do nabídky, Kopírovat, Upravit, Odstranit** a více produktů v jedné nabídce. Každá položka si zachová vlastní snapshot, revizi, model a artefakty.
+
+## 7.5 BOM, Price a zákaznická historie
+
+**PLANNED / PLÁNOVÁNO:** `CAD → BOM → ERP → Price → Offer`.
+
+Cena musí vycházet ze skutečné struktury nakonfigurovaného výrobku, ERP cen a obchodních podmínek zákazníka, nikoli z browseru nebo pevné demo hodnoty.
+
+Po výběru zákazníka bude dostupná historie nabídek, objednávek, projektů a realizovaných výrobků. Uživatel může nabídku znovu otevřít, objednat nebo vytvořit novou variantu ze staršího configuration snapshotu.
+
+## 7.6 Standardní 3D a AR větev
+
+**DONE / FUNKČNÍ:** PVZ + ThingView zůstává standardním interaktivním 3D workflow.
+
+**PLANNED / PLÁNOVÁNO:** paralelní větev `configured CAD → GLB/glTF → AR` nabídne měřítko 1:1, umístění a rotaci, QR přechod desktop → mobile a později rozměry, servisní zóny a anotace.
+
+Pro multi-product scénář platí `Current Offer → Layout → AR Scene / Assembly Preview`. Každá položka nese model, X/Y/Z, rotation a případné connection points.
+
+## 7.7 Commercial a operating model
+
+**PLANNED / PLÁNOVÁNO:** životní cyklus zákazníka je:
+
+`DEMO → Lead → Product Assessment → Solution Design → Implementation Offer → Implementation → Go-live → Annual Licence + Maintenance & Support → Change Requests`
+
+Obchodně se oddělují Implementation Fee, Software Licence, Maintenance & Support a Change Requests. Cenové dimenze jsou: edition/modules, internal-user tier, Product Packages a CAD Worker/capacity tier. Externí zákazníci Customer Portalu nejsou standardně účtováni jako interní per-seat uživatelé.
+
+Plánovaný růst provozu reaguje na skutečný bottleneck: **Owner + AI → externisté → Implementation Engineer → support/DevOps → sales**.
 
 ---
 
@@ -277,7 +354,7 @@ Mezi plánované oblasti patří:
 - samoobslužná konfigurace přes web
 - rozšířená realita
 - digitální dvojče výrobku
-- automatická tvorba obchodních dokumentů
+- produkční, revizně řízená tvorba obchodních a výrobních dokumentů
 - inteligentní doporučování konfigurací
 - sdílení firemního know-how prostřednictvím pravidel
 

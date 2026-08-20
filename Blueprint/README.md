@@ -10,11 +10,13 @@ Je to dokument, který popisuje proč ConfiRay vzniká, jakou má vizi, jaké pr
 
 Blueprint slouží jako společný referenční bod pro zakladatele, vývojáře, obchodníky, implementační konzultanty i budoucí zaměstnance.
 
-Blueprint rozlišuje tři úrovně zralosti:
+Blueprint rozlišuje tři závazné úrovně zralosti:
 
-- **Implementováno a ověřeno** – funkce existuje v současném technologickém základu a byla ověřena v demonstračním workflow.
-- **Částečně implementováno** – existuje funkční základ, ale chybí produkční zabezpečení, odolnost, obecnost nebo navazující procesy.
-- **Plánováno / cílová architektura** – dlouhodobá specifikace platformy, nikoli tvrzení o současné implementaci.
+- **DONE / FUNKČNÍ** – funkce existuje v současném technologickém základu a byla ověřena v demonstračním workflow.
+- **IN DEVELOPMENT / ROZPRACOVÁNO** – existuje funkční část nebo prototyp, ale chybí produkční odolnost, obecnost či navazující proces.
+- **PLANNED / PLÁNOVÁNO** – cílová produktová nebo technická architektura; nejde o tvrzení o současné implementaci.
+
+Stav se vždy vztahuje ke konkrétnímu popsanému rozsahu. Označení funkčního Conveyor workflow neznamená dokončení obecné platformy, plného CPQ, PDM/PLM ani produkčního provozu.
 
 Produktové členění ConfiRay Automation:
 

@@ -73,9 +73,11 @@ Změna parametrů na webu vytvoří požadavek na zpracování.
 
 ### Současný stav
 
-**Implementováno a ověřeno v technologickém demu:** WebCon generuje pole ze stejných `PARAMETERS`, `RULES` a `HELP` jako Creo Configurator, načte aktuální konfiguraci aktivního Conveyor modelu, validuje změny a po Publish odešle neměnný snapshot viditelných parametrů.
+**DONE / FUNKČNÍ:** WebCon generuje responsive pole ze stejných `PARAMETERS`, `RULES` a `HELP` jako Creo Configurator, nabízí kontextovou nápovědu a preview enum variant, validuje změny a odesílá neměnný snapshot. Pojmenovaný uživatel se přihlašuje konkrétním e-mailem; organization serverově volí DEMO JsonConnector nebo ALVARIS HeliosConnector. Pravý panel vyhledá firmu a její kontaktní osoby.
 
-**Plánováno pro Customer Portal:** produktový katalog, uživatelské účty, oprávnění, trvalé ukládání konfigurací a zákaznická historie.
+**IN DEVELOPMENT / ROZPRACOVÁNO:** funkční tlačítko Vytvořit nabídku generuje serverově ověřený DOCX/PDF s dynamickým renderem. Chybí trvalý draft, skutečná cena a multi-product nabídka.
+
+**PLANNED / PLÁNOVÁNO:** obecný produktový katalog, persistentní konfigurace, role, zákaznická historie, objednávky a projekty.
 
 ---
 
@@ -93,7 +95,7 @@ Po stisknutí tlačítka Generate:
 8. web obdrží informaci o dokončení,
 9. 3D výsledek se zobrazí zákazníkovi.
 
-V současném demu tuto roli plní tlačítko **Publish**: backend vytvoří request, FIFO fronta jej předá Creo Workeru, Creo model automaticky regeneruje, vznikne dočasný PVZ a WebCon jej zobrazí v ThingView. Web ukazuje čekání ve frontě včetně `queuePosition`, zpracování, vykreslování a chybu.
+V současném demu tuto CAD roli plní **VYTVOŘIT MODEL**: backend vytvoří request, FIFO fronta jej předá Creo Workeru, Creo model automaticky regeneruje, vznikne dočasný PVZ a WebCon jej zobrazí v ThingView. Web ukazuje `queuePosition`, zpracování, vykreslování a chybu. **VYTVOŘIT NABÍDKU** následně používá právě ready snapshot/model, zákazníka, kontakt a dynamický render.
 
 ---
 
@@ -109,7 +111,7 @@ Jednotlivý Creo Worker zpracovává jednu úlohu v daném okamžiku.
 
 Více workerů může být přidáno později.
 
-**Současný stav:** persistentní lokální FIFO fronta a serializované zpracování jedním Creo Workerem jsou implementované. Produkční víceuživatelské oddělení, retry, distribuce na více workerů a obnova po výpadku jsou plánované.
+**Současný stav:** persistentní lokální FIFO fronta, user/organization ownership, serializované zpracování jedním Creo Workerem, heartbeat lease a orphan recovery jsou implementované. Produkční tenant isolation, retry a distribuce na více workerů jsou plánované.
 
 ---
 
@@ -126,6 +128,8 @@ Historie může obsahovat:
 - výsledek,
 - případnou chybu,
 - dobu zpracování.
+
+**PLANNED / PLÁNOVÁNO:** po výběru zákazníka se zobrazí jeho nabídky, objednávky, projekty a realizované výrobky. Draft offer lze znovu otevřít, objednat nebo použít jako základ nové varianty. Reload WebConu obnoví relevantní persistentní configuration snapshot, nikoli poslední execution state workeru.
 
 ---
 

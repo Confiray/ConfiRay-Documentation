@@ -4,7 +4,7 @@
 
 Datový model definuje základní objekty platformy ConfiRay.
 
-Objekty níže představují cílový doménový model. Současné technologické demo zatím nepoužívá plnou databázovou implementaci User, Session, Product, Configuration, Worker a Audit Event.
+Objekty níže představují cílový doménový model. Současný základ již používá lokální User, serverovou Session, Customer kontrakt, Request, Worker lease a Offer artefakty, ale dosud nemá produkční databázovou implementaci celé domény.
 
 ---
 
@@ -15,8 +15,41 @@ Objekty níže představují cílový doménový model. Současné technologick�
 - `CurrentConfiguration` – lokální cache úplné konfigurace aktivního Creo modelu a čas synchronizace;
 - `Request` – šestimístné ID, snapshot parametrů, stav, request-bound PVZ, časy vytvoření/aktualizace a případně zobrazení/cleanup;
 - dočasný `Artifact` – `confiray_<requestId>.pvz` a nativní exportní log.
+- `User` – pojmenovaná e-mailová identita, organization a volitelné serverové mapování na externí username;
+- `Session` – expirovaná serverová session, CSRF a neveřejná supplier identity;
+- `Customer` a `Contact` – jednotný Connector kontrakt nad JSON nebo read-only Helios002;
+- `Offer` – číslo, vlastník/organization, customer/contact IDs, supplier contact ID, configuration snapshot, vazba na model request, render hash a DOCX/PDF artefakty.
 
 Request snapshot se po zařazení do fronty nemění. Data jsou dnes ukládána atomicky do JSON souborů; nejde ještě o produkční databázový ani víceuživatelský model.
+
+---
+
+## Cílová persistence konfigurací a nabídek
+
+**PLANNED / PLÁNOVÁNO:**
+
+```text
+Customer
+└── Draft Offers
+    └── Offer Items
+        └── Configuration Snapshots
+```
+
+Každý Offer Item persistuje minimálně:
+
+- product ID;
+- configuration ID;
+- revision;
+- úplný configuration snapshot;
+- validation state;
+- vytvořený model;
+- PVZ reference;
+- render;
+- později BOM a price.
+
+Rozpracovanou nabídku lze znovu otevřít. Existující platný PVZ se při pouhém otevření znovu negeneruje. Reload WebConu obnovuje relevantní persistentní konfiguraci uživatele a zákazníka. Worker ani `CurrentConfiguration` nejsou autoritativní doménovou persistencí.
+
+Multi-product Offer obsahuje více Offer Items a podporuje přidání, kopii, úpravu a odstranění položky. Každá položka zachovává vlastní product/revision/snapshot/model/artifacts.
 
 ---
 
@@ -63,6 +96,8 @@ Obsahuje:
 - konfigurátor,
 - pravidla,
 - CAD data.
+
+Product odkazuje na verzovaný Product Package: Master CAD, Product Default, schema, rules, UI/help a mapování BOM/Price/Publisher. Nová Configuration vzniká z tohoto defaultu, nikoli z posledního stavu Creo workeru.
 
 ---
 
@@ -125,9 +160,9 @@ Výstup vytvořený Jobem.
 
 Například:
 
-- STL (plánovaný exportní formát),
-- 3D model,
-- PDF,
+- PVZ a 3D render (**DONE / FUNKČNÍ** v dočasném request-bound workflow),
+- DOCX/PDF nabídka (**IN DEVELOPMENT / ROZPRACOVÁNO** jako lokální artefakt),
+- STEP, DXF a STL (**PLANNED / PLÁNOVÁNO**),
 - DXF,
 - STEP,
 - obrázek.
@@ -165,3 +200,7 @@ Jeden User může mít mnoho Configuration.
 Jedna Configuration může mít více Job.
 
 Jeden Job může vytvořit více Artifact.
+
+Cílový obchodní vztah rozšiřuje tento základ na:
+
+`Identity → Organization → Customer → Draft Offer → Offer Item → Configuration Snapshot → Job → Artifact → Order → Project`.

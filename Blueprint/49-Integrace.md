@@ -31,7 +31,9 @@ ERP poskytuje zejména:
 
 Konkrétní rozsah závisí na implementaci.
 
-ERP integrace zatím není součástí funkčního dema.
+**DONE / FUNKČNÍ v read-only Customer rozsahu:** organizace ALVARIS používá serverový HeliosConnector nad cvičnou databází Helios002. Parametrizované SELECT dotazy načítají firmy, kontaktní osoby, místa určení, obchodní údaje a supplier contact přihlášeného uživatele. Organizace DEMO používá JsonConnector/Virtual ERP. Connector volí výhradně server podle organization; credentials jsou mimo Git a browser.
+
+**PLANNED / PLÁNOVÁNO:** BOM, materiály, ERP ceny, objednávky, výrobní data a jakýkoli řízený zápis. Současný HeliosConnector je striktně read-only a neposkytuje obecné arbitrary SQL API.
 
 ---
 
@@ -58,7 +60,7 @@ PDM/PLM může sloužit jako úložiště:
 - revizí,
 - výrobních dat.
 
-Plný Publisher a PDM/PLM workflow zatím nejsou implementované. Současný PVZ je dočasný webový výstup, nikoli řízený PDM artefakt.
+Plný Publisher a PDM/PLM workflow zatím nejsou implementované. Současný PVZ je request-bound dočasný webový výstup a Publisher nabídky vytváří DOCX/PDF prototyp; ani jeden ještě není řízený PDM artefakt s revizí a dlouhodobým lifecycle.
 
 ---
 
@@ -67,3 +69,5 @@ Plný Publisher a PDM/PLM workflow zatím nejsou implementované. Současný PVZ
 ConfiRay nesmí být pevně svázán s jedním konkrétním ERP, CRM nebo PDM.
 
 Integrace musí být modulární.
+
+Společný Connector kontrakt odděluje WebCon a Publisher od konkrétního ERP. Cílový cenový tok je **CAD → BOM → ERP → Price → Offer** a nesmí přebírat cenu autoritativně z browseru.

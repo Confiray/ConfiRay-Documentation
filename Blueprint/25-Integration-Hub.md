@@ -66,7 +66,7 @@ Možné stavy:
 
 `rendering` je navazující klientský stav WebConu při načítání hotového PVZ do ThingView. `viewed` a `cleaned` jsou interní stavy životního cyklu dočasného výstupu.
 
-Cancellation, retry, heartbeat a obecné orchestrace více typů workerů jsou cílová architektura, nikoli současná implementace.
+Heartbeat, 90s lease, worker ownership a orphan recovery do `failed` jsou **DONE / FUNKČNÍ**. Cancellation, automatický retry a obecná orchestrace více typů či instancí workerů jsou **PLANNED / PLÁNOVÁNO**.
 
 ---
 
@@ -89,3 +89,9 @@ od
 **ERP/PDM/CRM**.
 
 Jednotlivé systémy proto mohou být v budoucnu nahrazeny nebo rozšířeny bez změny celého systému.
+
+### Současný ERP Connector základ
+
+**DONE / FUNKČNÍ:** backend volí Connector podle organization přihlášeného uživatele. DEMO používá JSON/Virtual ERP; ALVARIS používá read-only HeliosConnector pro zákazníky, kontaktní osoby, místa určení a supplier contact. Browser nemůže volbu Connectoru přepsat a SQL credentials zůstávají mimo Git i klienta.
+
+**PLANNED / PLÁNOVÁNO:** BOM, ERP ceny, nabídky/objednávky, výrobní data a explicitně řízené write operace s auditem.

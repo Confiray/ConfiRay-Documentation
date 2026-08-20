@@ -72,7 +72,7 @@ Systém sleduje:
 - počet chyb,
 - stav Workerů.
 
-Tento seznam je cílový monitoring. Současný základ ukládá stav a základní časové údaje requestu, ale nemá plnou telemetrii, dashboard, heartbeat, SLA ani automatický retry.
+Současný základ ukládá stav a časy requestu, worker posílá 5s heartbeat a backend používá 90s lease s orphan recovery. `/api/runtime-status` poskytuje necitlivou readiness pro startup. Plná telemetrie, dashboard, SLA, kapacitní plánování, persistentní worker registry a automatický retry jsou **PLANNED / PLÁNOVÁNO**.
 
 ---
 

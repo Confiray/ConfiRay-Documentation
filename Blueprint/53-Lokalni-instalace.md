@@ -31,6 +31,10 @@ Lokální Creo relace
 
 Po úspěšném načtení PVZ ve WebConu backend naplánuje jeho cleanup. Demo nepoužívá produkční databázi ani trvalé úložiště artefaktů.
 
+### Jednotný runtime startup
+
+**DONE / FUNKČNÍ:** `Start-ConfiRay.ps1` a desktop launcher **ConfiRay START - RESTART** zajišťují první spuštění i bezpečný restart. Startup používá výhradně repo `.venv`, ověří dependency včetně `pyodbc`, existenci ignorovaného Helios configu bez výpisu secrets, bezpečně identifikuje případný starý backend tohoto projektu, spustí backend, čeká na `/api/runtime-status`, připraví Creo/Configurator, čeká na skutečný worker heartbeat a ověří Cloudflare Tunnel. WebCon otevře teprve po readiness; při chybě skončí fail-fast se srozumitelnou diagnostikou.
+
 ---
 
 ## Produkční lokální instalace
@@ -50,4 +54,4 @@ Creo Worker
 └── Creo + ConfiRay Configurator + Publisher
 ```
 
-Produkční zabezpečení, recovery, zálohování, deployment balíčky, více workerů a PDM/PLM konektory jsou plánované.
+Základní worker heartbeat a orphan recovery jsou funkční. Produkční zabezpečení, zálohování, deployment balíčky, service management, více workerů a PDM/PLM konektory jsou plánované.
